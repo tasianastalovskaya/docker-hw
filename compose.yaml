@@ -3,6 +3,12 @@ services:
     build: .
     ports:
       - "${APP_PORT}:8000"
+    user: "10001:10001"
+    read_only: true
+    tmpfs:
+      - /tmp
+    mem_limit: 256m
+    cpus: 1.0
     environment:
       STORAGE: redis
       REDIS_URL: redis://redis:6379/0
@@ -10,7 +16,7 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz', timeout=3)"]
       interval: 5s
       timeout: 3s
       retries: 5
