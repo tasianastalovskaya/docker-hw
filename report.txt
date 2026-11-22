@@ -1,0 +1,32 @@
+Задание на 8 баллов
+Хранение данных в Redis
+
+1 Запуск программы
+docker compose up -d --build
+
+2 Проверка работы
+docker compose ps
+
+Сервисы app и redis запущены и работают
+
+3 Проверка счетчика
+curl localhost:8000/
+curl -X POST localhost:8000/increment
+curl -X POST localhost:8000/increment
+
+Счетчик показал 1, 2 и 3
+
+4 Проверка после остановки Redis
+docker compose stop redis
+
+Страница /healthz работает
+Страница /readyz показывает ошибку 503
+Запрос /increment тоже показывает ошибку 503
+
+5 Запуск Redis снова
+docker compose start redis
+
+После запуска счетчик сохранил значение 3
+После нового запроса он стал равен 4
+
+Данные счетчика сохраняются в volume redis-data
